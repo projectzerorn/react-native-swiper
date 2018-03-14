@@ -44,8 +44,8 @@ var styles = StyleSheet.create({
   }
 })
 
-var swiper = React.createClass({
-  render: function() {
+class swiper extends React.Component {
+  render() {
     return (
       <View>
         <Swiper style={styles.wrapper} height={200} horizontal={false} autoplay={true}>
@@ -83,6 +83,6 @@ var swiper = React.createClass({
       </View>
     )
   }
-})
+}
 
 module.exports = swiper

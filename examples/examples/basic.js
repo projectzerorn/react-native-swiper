@@ -35,12 +35,13 @@ var styles = StyleSheet.create({
   }
 })
 
-var swiper = React.createClass({
-  _onMomentumScrollEnd: function (e, state, context) {
+class swiper extends React.Component {
+  _onMomentumScrollEnd = (e, state, context) => {
     // you can get `state` and `this`(ref to swiper's context) from params
     console.log(state, context.state)
-  },
-  render: function() {
+  };
+
+  render() {
     return (
       <Swiper style={styles.wrapper}
       onMomentumScrollEnd={this._onMomentumScrollEnd}
@@ -57,7 +58,7 @@ var swiper = React.createClass({
       </Swiper>
     )
   }
-})
+}
 
 module.exports = swiper
 

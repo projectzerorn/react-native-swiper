@@ -35,19 +35,19 @@ var styles = StyleSheet.create({
   }
 })
 
-var swiper = React.createClass({
-  getInitialState: function() {
-    return {
-      items: []
-    };
-  },
-  componentDidMount: function() {
+class swiper extends React.Component {
+  state = {
+    items: []
+  };
+
+  componentDidMount() {
     this.setState({
       items: [ { title: 'Hello Swiper', css: styles.slide1 }, { title: 'Beautiful', css: styles.slide2 },
         { title: 'And simple', css: styles.slide3 } ]
     });
-  },
-  render: function() {
+  }
+
+  render() {
     return(
       <Swiper showsButtons={true}>
         {this.state.items.map((item, key) => {
@@ -60,7 +60,7 @@ var swiper = React.createClass({
       </Swiper>
     );
   }
-})
+}
 
 module.exports = swiper
 

@@ -41,8 +41,8 @@ var renderPagination = function (index, total, context) {
   )
 }
 
-var swiper = React.createClass({
-  render: function() {
+class swiper extends React.Component {
+  render() {
     return (
       <View>
         <Swiper style={styles.wrapper} height={240}
@@ -66,7 +66,7 @@ var swiper = React.createClass({
       </View>
     )
   }
-})
+}
 
 module.exports = swiper
 

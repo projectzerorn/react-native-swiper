@@ -5,6 +5,7 @@
 import PropTypes from 'prop-types';
 
 import React from 'react';
+import createReactClass from 'create-react-class';
 import ReactNative, {
   StyleSheet,
   Text,
@@ -101,7 +102,7 @@ let styles = StyleSheet.create({
 
 // missing `module.exports = exports['default'];` with babel6
 // export default React.createClass({
-module.exports = React.createClass({
+module.exports = createReactClass({
 
   /**
    * Props Validation

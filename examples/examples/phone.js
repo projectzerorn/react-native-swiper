@@ -21,8 +21,8 @@ var styles = StyleSheet.create({
   }
 })
 
-var swiper = React.createClass({
-  render: function() {
+class swiper extends React.Component {
+  render() {
     return (
       <View>
         <Image source={{uri: 'http://i.imgur.com/rVekwfn.jpg'}}>
@@ -47,6 +47,6 @@ var swiper = React.createClass({
       </View>
     )
   }
-})
+}
 
 module.exports = swiper
