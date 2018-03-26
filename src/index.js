@@ -14,7 +14,8 @@ import ReactNative, {
   Dimensions,
   TouchableOpacity,
   ViewPagerAndroid,
-  Platform
+  Platform,
+  ViewPropTypes
 } from 'react-native'
 
 // Using bare setTimeout, setInterval, setImmediate
@@ -24,7 +25,10 @@ import ReactNative, {
 // throwing an exception.
 import TimerMixin from 'react-timer-mixin'
 
-let { width, height } = Dimensions.get('window')
+let {
+  width,
+  height
+} = Dimensions.get('window')
 
 /**
  * Default styles
@@ -53,7 +57,7 @@ let styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor:'transparent',
+    backgroundColor: 'transparent',
   },
 
   pagination_y: {
@@ -65,7 +69,7 @@ let styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor:'transparent',
+    backgroundColor: 'transparent',
   },
 
   title: {
@@ -109,25 +113,25 @@ module.exports = createReactClass({
    * @type {Object}
    */
   propTypes: {
-    horizontal                       : PropTypes.bool,
-    children                         : PropTypes.node.isRequired,
-    style                            : View.propTypes.style,
-    pagingEnabled                    : PropTypes.bool,
-    showsHorizontalScrollIndicator   : PropTypes.bool,
-    showsVerticalScrollIndicator     : PropTypes.bool,
-    bounces                          : PropTypes.bool,
-    scrollsToTop                     : PropTypes.bool,
-    removeClippedSubviews            : PropTypes.bool,
-    automaticallyAdjustContentInsets : PropTypes.bool,
-    showsPagination                  : PropTypes.bool,
-    showsButtons                     : PropTypes.bool,
-    loop                             : PropTypes.bool,
-    autoplay                         : PropTypes.bool,
-    autoplayTimeout                  : PropTypes.number,
-    autoplayDirection                : PropTypes.bool,
-    index                            : PropTypes.number,
-    renderPagination                 : PropTypes.func,
-    onScroll                         : PropTypes.func,
+    horizontal: PropTypes.bool,
+    children: PropTypes.node.isRequired,
+    style: ViewPropTypes.style,
+    pagingEnabled: PropTypes.bool,
+    showsHorizontalScrollIndicator: PropTypes.bool,
+    showsVerticalScrollIndicator: PropTypes.bool,
+    bounces: PropTypes.bool,
+    scrollsToTop: PropTypes.bool,
+    removeClippedSubviews: PropTypes.bool,
+    automaticallyAdjustContentInsets: PropTypes.bool,
+    showsPagination: PropTypes.bool,
+    showsButtons: PropTypes.bool,
+    loop: PropTypes.bool,
+    autoplay: PropTypes.bool,
+    autoplayTimeout: PropTypes.number,
+    autoplayDirection: PropTypes.bool,
+    index: PropTypes.number,
+    renderPagination: PropTypes.func,
+    onScroll: PropTypes.func,
   },
 
   mixins: [TimerMixin],
@@ -139,21 +143,21 @@ module.exports = createReactClass({
    */
   getDefaultProps() {
     return {
-      horizontal                       : true,
-      pagingEnabled                    : true,
-      showsHorizontalScrollIndicator   : false,
-      showsVerticalScrollIndicator     : false,
-      bounces                          : false,
-      scrollsToTop                     : false,
-      removeClippedSubviews            : true,
-      automaticallyAdjustContentInsets : false,
-      showsPagination                  : true,
-      showsButtons                     : false,
-      loop                             : true,
-      autoplay                         : false,
-      autoplayTimeout                  : 2.5,
-      autoplayDirection                : true,
-      index                            : 0,
+      horizontal: true,
+      pagingEnabled: true,
+      showsHorizontalScrollIndicator: false,
+      showsVerticalScrollIndicator: false,
+      bounces: false,
+      scrollsToTop: false,
+      removeClippedSubviews: true,
+      automaticallyAdjustContentInsets: false,
+      showsPagination: true,
+      showsButtons: false,
+      loop: true,
+      autoplay: false,
+      autoplayTimeout: 2.5,
+      autoplayDirection: true,
+      index: 0,
     }
   },
 
@@ -200,12 +204,12 @@ module.exports = createReactClass({
 
     if (initState.total > 1) {
       var setup = initState.index
-      if ( props.loop ) {
+      if (props.loop) {
         setup++
       }
-      initState.offset[initState.dir] = initState.dir == 'y'
-        ? initState.height * setup
-        : initState.width * setup
+      initState.offset[initState.dir] = initState.dir == 'y' ?
+        initState.height * setup :
+        initState.width * setup
     }
     return initState
   },
@@ -214,17 +218,17 @@ module.exports = createReactClass({
    * Automatic rolling
    */
   autoplay() {
-    if(!Array.isArray(this.props.children)
-      || !this.props.autoplay
-      || this.state.isScrolling
-      || this.state.autoplayEnd) return
+    if (!Array.isArray(this.props.children) ||
+      !this.props.autoplay ||
+      this.state.isScrolling ||
+      this.state.autoplayEnd) return
 
     clearTimeout(this.autoplayTimer)
 
     this.autoplayTimer = this.setTimeout(() => {
-      if(!this.props.loop && (this.props.autoplayDirection
-          ? this.state.index == this.state.total - 1
-          : this.state.index == 0)) return this.setState({
+      if (!this.props.loop && (this.props.autoplayDirection ?
+          this.state.index == this.state.total - 1 :
+          this.state.index == 0)) return this.setState({
         autoplayEnd: true
       })
       this.scrollTo(this.props.autoplayDirection ? 1 : -1)
@@ -259,9 +263,13 @@ module.exports = createReactClass({
     // making our events coming from android compatible to updateIndex logic
     if (!e.nativeEvent.contentOffset) {
       if (this.state.dir == 'x') {
-        e.nativeEvent.contentOffset = {x: e.nativeEvent.position * this.state.width}
+        e.nativeEvent.contentOffset = {
+          x: e.nativeEvent.position * this.state.width
+        }
       } else {
-        e.nativeEvent.contentOffset = {y: e.nativeEvent.position * this.state.height}
+        e.nativeEvent.contentOffset = {
+          y: e.nativeEvent.position * this.state.height
+        }
       }
     }
 
@@ -278,13 +286,17 @@ module.exports = createReactClass({
   },
 
   onScroll(e) {
-    this.props.onScroll({ x: e.nativeEvent.contentOffset.x });
+    this.props.onScroll({
+      x: e.nativeEvent.contentOffset.x
+    });
   },
 
   onAndroidScroll(e) {
     const event = e.nativeEvent;
     const x = event.position * this.state.width + event.offset * this.state.width;
-    this.props.onScroll({ x });
+    this.props.onScroll({
+      x
+    });
   },
 
 
@@ -301,18 +313,17 @@ module.exports = createReactClass({
     let step = dir == 'x' ? state.width : state.height
 
     // Do nothing if offset no change.
-    if(!diff) return
+    if (!diff) return
 
     // Note: if touch very very quickly and continuous,
     // the variation of `index` more than 1.
     index = index + diff / step
 
-    if(this.props.loop) {
-      if(index <= -1) {
+    if (this.props.loop) {
+      if (index <= -1) {
         index = state.total - 1
         offset[dir] = step * state.total
-      }
-      else if(index >= state.total) {
+      } else if (index >= state.total) {
         index = 0
         offset[dir] = step
       }
@@ -334,8 +345,8 @@ module.exports = createReactClass({
     let diff = (this.props.loop ? 1 : 0) + index + this.state.index
     let x = 0
     let y = 0
-    if(state.dir == 'x') x = diff * state.width
-    if(state.dir == 'y') y = diff * state.height
+    if (state.dir == 'x') x = diff * state.width
+    if (state.dir == 'y') y = diff * state.height
 
     if (Platform.OS === 'android') {
       this.refs.scrollView && this.refs.scrollView.setPage(diff)
@@ -372,7 +383,7 @@ module.exports = createReactClass({
   renderPagination() {
 
     // By default, dots only show when `total` > 2
-    if(this.state.total <= 1) return null
+    if (this.state.total <= 1) return null
 
     let dots = []
     let ActiveDot = this.props.activeDot || <View style={{
@@ -395,12 +406,14 @@ module.exports = createReactClass({
             marginTop: 3,
             marginBottom: 3,
           }} />;
-    for(let i = 0; i < this.state.total; i++) {
-      dots.push(i === this.state.index
-        ?
-        React.cloneElement(ActiveDot, {key: i})
-        :
-        React.cloneElement(Dot, {key: i})
+    for (let i = 0; i < this.state.total; i++) {
+      dots.push(i === this.state.index ?
+        React.cloneElement(ActiveDot, {
+          key: i
+        }) :
+        React.cloneElement(Dot, {
+          key: i
+        })
       )
     }
 
@@ -414,13 +427,13 @@ module.exports = createReactClass({
   renderTitle() {
     let child = this.props.children[this.state.index]
     let title = child && child.props.title
-    return title
-      ? (
+    return title ?
+      (
         <View style={styles.title}>
           {this.props.children[this.state.index].props.title}
         </View>
-      )
-      : null
+      ) :
+      null
   },
 
   renderNextButton() {
@@ -443,7 +456,7 @@ module.exports = createReactClass({
     let button = null
 
     if (this.props.loop || this.state.index != 0) {
-       button = this.props.prevButton || <Text style={styles.buttonText}>‹</Text>
+      button = this.props.prevButton || <Text style={styles.buttonText}>‹</Text>
     }
 
     return (
@@ -464,9 +477,9 @@ module.exports = createReactClass({
     )
   },
   renderScrollView(pages) {
-     if (Platform.OS === 'ios')
-         return (
-            <ScrollView ref="scrollView"
+    if (Platform.OS === 'ios')
+      return (
+        <ScrollView ref="scrollView"
              {...this.props}
                        contentContainerStyle={[styles.wrapper, this.props.style]}
                        contentOffset={this.state.offset}
@@ -477,9 +490,9 @@ module.exports = createReactClass({
                        >
              {pages}
             </ScrollView>
-         );
-      return (
-         <ViewPagerAndroid ref="scrollView"
+      );
+    return (
+      <ViewPagerAndroid ref="scrollView"
           {...this.props}
             initialPage={this.state.index}
             onPageSelected={this.onScrollEnd}
@@ -488,7 +501,7 @@ module.exports = createReactClass({
           >
             {pages}
          </ViewPagerAndroid>
-      );
+    );
   },
   /**
    * Inject state to ScrollResponder
@@ -496,21 +509,21 @@ module.exports = createReactClass({
    * @return {object} props injected props
    */
   injectState(props) {
-/*    const scrollResponders = [
-      'onMomentumScrollBegin',
-      'onTouchStartCapture',
-      'onTouchStart',
-      'onTouchEnd',
-      'onResponderRelease',
-    ]*/
+    /*    const scrollResponders = [
+          'onMomentumScrollBegin',
+          'onTouchStartCapture',
+          'onTouchStart',
+          'onTouchEnd',
+          'onResponderRelease',
+        ]*/
 
-    for(let prop in props) {
+    for (let prop in props) {
       // if(~scrollResponders.indexOf(prop)
-      if(typeof props[prop] === 'function'
-        && prop !== 'onMomentumScrollEnd'
-        && prop !== 'renderPagination'
-        && prop !== 'onScrollBeginDrag'
-        && prop !== 'onScroll'
+      if (typeof props[prop] === 'function' &&
+        prop !== 'onMomentumScrollEnd' &&
+        prop !== 'renderPagination' &&
+        prop !== 'onScrollBeginDrag' &&
+        prop !== 'onScroll'
       ) {
         let originResponder = props[prop]
         props[prop] = (e) => originResponder(e, this.state, this)
@@ -535,14 +548,17 @@ module.exports = createReactClass({
     let key = 0
 
     let pages = []
-    let pageStyle = [{width: state.width, height: state.height}, styles.slide]
+    let pageStyle = [{
+      width: state.width,
+      height: state.height
+    }, styles.slide]
 
     // For make infinite at least total > 1
-    if(total > 1) {
+    if (total > 1) {
 
       // Re-design a loop model for avoid img flickering
       pages = Object.keys(children)
-      if(loop) {
+      if (loop) {
         pages.unshift(total - 1)
         pages.push(0)
       }
@@ -550,8 +566,7 @@ module.exports = createReactClass({
       pages = pages.map((page, i) =>
         <View style={pageStyle} key={i}>{children[page]}</View>
       )
-    }
-    else pages = <View style={pageStyle}>{children}</View>
+    } else pages = <View style={pageStyle}>{children}</View>
 
     return (
       <View style={[styles.container, {
